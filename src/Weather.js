@@ -1,8 +1,8 @@
-import React, { useState } from "react";
 import Forecast from "./Forecast";
 import axios from "axios";
 import WeatherInfo from "./WeatherInfo";
 import "./Weather.css";
+import React, { useState, useEffect } from "react";
 
 export default function Weather(props) {
   const [city, setCity] = useState(props.defaultCity);
@@ -29,11 +29,14 @@ export default function Weather(props) {
     let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
     axios.get(apiUrl).then(handleResponse);
   }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    search();
+  };
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    search(city);
-  }
+  useEffect(() => {
+    search();
+  }, [city]);
 
   function handleCityChange(event) {
     setCity(event.target.value);
@@ -46,7 +49,6 @@ export default function Weather(props) {
           <div className="row">
             <div className="col-9">
               <input
-              
                 type="search"
                 className="form-control rounded-pill"
                 autoComplete="off"
